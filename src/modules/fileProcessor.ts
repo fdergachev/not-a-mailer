@@ -1,4 +1,5 @@
 import { ProcessedRow, Row, RowRaw } from "../types/row";
+import { RowProcessor } from "./mailer";
 import { formatRow } from "./rowFormater";
 
 const fs = require('fs');
@@ -11,7 +12,7 @@ const Papa = {
 };
 
 
-export async function processCsvFile(filePath:string, delay = 0, processingFunction: (row:ProcessedRow, totalProcessed:number)=>{success:boolean, error?:Error}) {
+export async function processCsvFile(filePath:string, delay = 0, rowProcessor:RowProcessor) {
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(filePath)) {
       reject(new Error(`File not found: ${filePath}`));
@@ -42,7 +43,7 @@ export async function processCsvFile(filePath:string, delay = 0, processingFunct
         
         // Process the current row
       const rowProcessed = formatRow(row);
-        const result = await processingFunction(rowProcessed, stats.totalProcessed);
+        const result = await rowProcessor.processRow(rowProcessed, stats.totalProcessed);
         
         // Update stats
         if (result.success) {

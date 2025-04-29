@@ -6,7 +6,8 @@
       "papaparse": "^5.5.2",
       "path": "^0.12.7",
       "stream": "^0.0.3",
-      "tsc": "^2.0.4"
+      "tsc": "^2.0.4",
+      "yargs": "^17.7.2"
    },
    "scripts": {
       "start": "ts-node src/index.ts",
