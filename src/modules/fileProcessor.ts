@@ -33,6 +33,10 @@ export async function processCsvFile(filePath:string, delay = 0, rowProcessor:Ro
       header: true,         // Treat first row as headers
       skipEmptyLines: true, // Skip empty lines
       dynamicTyping: true,  // Convert strings to numbers/booleans when possible
+      transformHeader: (header:any) => {
+         // Remove BOM character if present
+         return header.replace(/^\uFEFF/, '');
+       }
     });
     
     // Create processing pipeline
@@ -42,6 +46,7 @@ export async function processCsvFile(filePath:string, delay = 0, rowProcessor:Ro
         stats.totalProcessed++;
         
         // Process the current row
+      // console.log(row)
       const rowProcessed = formatRow(row);
         const result = await rowProcessor.processRow(rowProcessed, stats.totalProcessed);
         
